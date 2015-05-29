@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<head>
+	<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js'></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script1.js"></script>
+    <!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <style>
+		body {
+			background-color: #000;
+		}
+		ul {
+			list-style-type: none;
+		}
+		.console {
+			padding: 10px;
+		}
+    </style>
+</head>
+<body ng-app="myApp">
+	<div class="console">
+		<ul ng-controller="LogController">
+			<li ng-repeat="log in logs | orderBy:'-Timestamp'">
+				<span style="color:{{log.Color}}">{{log.Timestamp|date:"dd/MM/yy HH:mm:ss"}}: {{log.Source}} - {{log.Message}}</span>
+			</li>
+		</ul>
+	</div>
+</body>
