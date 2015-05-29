@@ -1,33 +1,89 @@
+var DEBUG = false;
+var SCRIPT_DIRECTORY = __dirname + '/utils/javascript/';
+// Important, ensure that a trailing slash exists here.
 
-var express = require('express');
-var app = express();
-var http = require('http').Server(app);
-var bodyParser = require('body-parser')
+var mod_express = require('express');
+var mod_bodyParser = require('body-parser')
 
-var io = require('socket.io')(http);
+var express_app = mod_express();
+var mod_http = require('http').Server(express_app);
+var mod_io = require('socket.io')(mod_http);
+var mod_path = require('path');
+var mod_fs = require('fs');
 
-app.set('views', __dirname + '/views');
-app.set("view options", { layout: false });
+var module_holder = {};
 
-app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.json())
+function LoadModules(path) {
 
-app.get('/', function(req, res){
-  res.sendfile('home.html');
+    mod_fs.lstat(path, function(err, stat) {
+
+        if (stat.isDirectory()) {
+
+            // we have a directory: do a tree walk
+            mod_fs.readdir(path, function(err, files) {
+            
+                var f, l = files.length;
+
+                for (var i = 0; i < l; i++) {
+
+                    f = mod_path.join(path, files[i]);
+                    LoadModules(f);
+                }
+            });
+        } else {
+            // we have a file: load it
+            console.log("Loading Module: " + path);
+            require(path)(module_holder);
+        }
+    });
+};
+
+console.log("[+] Loading Modules in " + SCRIPT_DIRECTORY);
+LoadModules(SCRIPT_DIRECTORY);
+
+var logUrl = "http://localhost:3000/log";
+
+var interval = setInterval(function() {
+
+    for (var k in module_holder) {
+        
+        var task = module_holder[k];
+
+        if (task.canRun()) {
+
+            console.log("[+] Running Task: " + task.name);
+            task.run(logUrl);
+        }
+    }   
+}, 2000);
+
+
+express_app.set('views', __dirname + '/views');
+express_app.set("view options", { layout: false });
+express_app.use(mod_express.static(__dirname + '/public'));
+express_app.use(mod_bodyParser.json())
+
+express_app.get('/', function(req, res){
+
+    res.sendfile('home.html');
 });
 
-app.post('/log', function(req, res) {
+// the log method is used to push messages
+// THrough the socket
+express_app.post('/log', function(req, res) {
 
-	io.emit('eventlog', req.body);
-    console.log(req.body);
+    mod_io.emit('eventlog', req.body);
     res.send(null);
 });
 
-io.on('connection', function(socket){
-  console.log('a user connected');
+mod_io.on('connection', function(socket){
+
+    console.log('[i] Received a new connection from a user');
 });
 
-http.listen(3000, function() {
-	console.log("Server listening on *:3000");
+
+mod_http.listen(3000, function() {
+
+    console.log("[+] Server listening on *:3000");
 });
 
