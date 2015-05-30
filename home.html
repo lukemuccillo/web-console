@@ -1,32 +1,28 @@
-<!DOCTYPE html>
-<head>
-	<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
-    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js'></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="script1.js"></script>
-    <!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8" />
 
-	<!-- Optional theme -->
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    <style>
-		body {
-			background-color: #000;
-		}
-		ul {
-			list-style-type: none;
-		}
-		.console {
-			padding: 10px;
-		}
-    </style>
-</head>
-<body ng-app="myApp">
-	<div class="console">
-		<ul ng-controller="LogController">
-			<li ng-repeat="log in logs | orderBy:'-Timestamp'">
-				<span style="color:{{log.Color}}">{{log.Timestamp|date:"dd/MM/yy HH:mm:ss"}}: {{log.Source}} - {{log.Message}}</span>
-			</li>
-		</ul>
-	</div>
-</body>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>Skycoder Labs | Home</title>
+        <link rel="stylesheet" href="css/foundation.css" />
+        <link rel="stylesheet" href="css/site.css" />
+
+        <script src='/js/vendor/jquery.min.js'></script>
+        <script src='/js/vendor/angular.min.js'></script>
+        <script src="/js/vendor/modernizr.js"></script>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/js/script.js"></script>
+    </head>
+    <body ng-app="myApp">
+        <div class="console">
+            <ul ng-controller="LogController">
+                <li ng-repeat="log in logs | orderBy:'-Timestamp'">
+                    <span style="color:{{log.Color}}">{{log.Timestamp|date:"dd/MM/yy HH:mm:ss"}}: {{log.Source}} - {{log.Message}}</span>
+                </li>
+            </ul>
+        </div>
+    </body>
+</html>
