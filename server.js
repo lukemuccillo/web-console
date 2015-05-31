@@ -1,4 +1,5 @@
 var DEBUG = false;
+var INTERVAL = 5000;
 var SCRIPT_DIRECTORY = __dirname + '/utils/javascript/';
 // Important, ensure that a trailing slash exists here.
 
@@ -55,7 +56,7 @@ var interval = setInterval(function() {
             task.run(logUrl);
         }
     }   
-}, 2000);
+}, INTERVAL);
 
 
 express_app.set('views', __dirname + '/views');

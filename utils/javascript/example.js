@@ -12,13 +12,17 @@ function ExampleTask()
 
     this.run = function(url) {
 
+        var cntDate = Date();
+
+        var text = "It is currently " + cntDate.toString();
+
         var options = {
             uri: url,
             method: 'POST',
             json: {
                 Color: this.color, 
                 Source: this.name,
-                Message: "This is a test message"
+                Message: text
             }
         };
 

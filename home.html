@@ -17,12 +17,36 @@
         <script src="/js/script.js"></script>
     </head>
     <body ng-app="myApp">
-        <div class="console">
-            <ul ng-controller="LogController">
-                <li ng-repeat="log in logs | orderBy:'-Timestamp'">
-                    <span style="color:{{log.Color}}">{{log.Timestamp|date:"dd/MM/yy HH:mm:ss"}}: {{log.Source}} - {{log.Message}}</span>
-                </li>
-            </ul>
+        <div class="row">
+            <div id="page-title" class="medium-6 large-6 small-12 columns text-center">
+                <h1>Streaming Text</h1>
+                <p>A simple NodeJS SocketJS demo</p>
+            </div>
+            <div class="small-12 medium-6 large-6 columns" 
+                    ng-controller="MessageEmitController">
+                <div id="emit-form" class="panel">
+                    <div class="row collapse">
+                        <div class="small-10 columns">
+                             <input ng-model="data.message" type="text" placeholder="Emit a message to all listeners">
+                        </div>
+                        <div class="small-2 columns">
+                            <button ng-click="saveMessage()" 
+                            ng-disabled="data.message == ''" class="button postfix">Go</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="panel">
+                <div class="small-12 medium-12 large-12">
+                        <ul ng-controller="LogController">
+                            <li ng-repeat="log in logs | orderBy:'-Timestamp'">
+                                <span style="color:{{log.Color}}">{{log.Timestamp|date:"dd/MM/yy HH:mm:ss"}}: {{log.Source}} - {{log.Message}}</span>
+                            </li>
+                        </ul>
+                </div>
+            </div>
         </div>
     </body>
 </html>

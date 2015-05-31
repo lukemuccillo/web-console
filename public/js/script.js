@@ -48,9 +48,36 @@ app.filter('bySource', function() {
 	};
 });
 
-app.controller("LogController", function($scope) {
 
-	console.log("Script 1 is running");
+app.controller("MessageEmitController", function($scope, $http) {
+
+    $scope.data = {
+        message: "",
+        source: "WEBSITE",
+        color: "#000000"
+    };
+
+    $scope.saveMessage = function() {
+        
+        // Don't send empty strings.
+        if ($scope.data.message == "") {
+            return;
+        }
+
+        var postData = {
+            Message: $scope.data.message,
+            Color: $scope.data.color,
+            Source: $scope.data.source
+        };
+
+        $http.post("/log", postData)
+        .success(function(result) {
+            $scope.message = "";
+        });
+    };
+});
+
+app.controller("LogController", function($scope) {
 
 	$scope.selectedSources = [];
 
@@ -74,6 +101,8 @@ app.controller("LogController", function($scope) {
 	$scope.filter = {}
 
 	$scope.socket = io();
+
+        $scope.maxLogsToKeep = 5;
 	$scope.logs = [];
 
 	window.me = $scope;
@@ -85,12 +114,11 @@ app.controller("LogController", function($scope) {
 
 		$scope.logs.push(log);
 
-		// if ($scope.logs.length > 10) {
-			// $scope.logs.shift();
-		//} 
+		if ($scope.logs.length > $scope.maxLogsToKeep) {
+			$scope.logs.shift();
+		} 
 		
 		$scope.$apply();
 	});
-
 });
 
